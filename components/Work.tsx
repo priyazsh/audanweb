@@ -1,207 +1,153 @@
 "use client";
 
+import { useEffect } from "react";
+import Script from "next/script";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, TrendingUp, Zap, Target } from "lucide-react";
-import { caseStudies } from "@/lib/data";
-import { fadeUp, stagger } from "@/lib/motion";
+import { ArrowUpRight } from "lucide-react";
+import { promoTweets } from "@/lib/data";
 
-function CaseStudyVisual({ brand, index }: { brand: string; index: number }) {
-  if (index === 0) {
-    // SECUREINTENT visual - Developer dashboard launch simulation
-    return (
-      <div className="w-full h-full bg-fg text-bg rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden group-hover:border-accent/40 transition-colors border border-transparent">
-        {/* Background glow */}
-        <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Top mock terminal header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-          </div>
-          <span className="text-[10px] font-mono text-white/40 tracking-wider uppercase">
-            launch_metrics.log
-          </span>
-        </div>
-
-        {/* Mock content */}
-        <div className="space-y-4 font-mono text-xs z-10">
-          <div className="flex items-center justify-between text-white/60">
-            <span>[HN_FRONT_PAGE]</span>
-            <span className="text-accent font-bold">POSITION #3</span>
-          </div>
-          <div className="flex items-center justify-between text-white/60">
-            <span>[DEV_TWITTER_REACH]</span>
-            <span className="text-white">1.4M IMPRESSIONS</span>
-          </div>
-          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: "85%" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="bg-accent h-full"
-            />
-          </div>
-          <div className="flex items-center gap-2 text-[11px] text-white/40 pt-2">
-            <TrendingUp size={14} className="text-accent" />
-            <span>Viral spike detected across 14 technical subreddits</span>
-          </div>
-        </div>
-
-        {/* Brand overlay tag */}
-        <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between z-10">
-          <span className="text-xs font-bold text-white tracking-widest uppercase">{brand}</span>
-          <span className="text-[10px] text-accent font-bold tracking-widest uppercase">72 Hours Drop</span>
-        </div>
-      </div>
-    );
-  }
-
-  // MOTIONKIT visual - Creator network drop graph
-  return (
-    <div className="w-full h-full bg-surface rounded-2xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden border border-border group-hover:border-fg/30 transition-colors">
-      {/* Top header */}
-      <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
-        <span className="text-[10px] font-mono text-muted tracking-wider uppercase">
-          creator_drop_network.map
-        </span>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          <span className="text-[10px] font-bold text-fg tracking-widest uppercase">12 Nodes Sync</span>
-        </div>
-      </div>
-
-      {/* Nodes grid representation */}
-      <div className="grid grid-cols-3 gap-3 my-4 z-10">
-        {[1, 2, 3, 4, 5, 6].map((node) => (
-          <motion.div
-            key={node}
-            whileHover={{ scale: 1.05 }}
-            className="p-3 bg-bg rounded-xl border border-border flex flex-col items-center justify-center text-center gap-1"
-          >
-            <Zap size={14} className={node % 2 === 0 ? "text-accent" : "text-fg"} />
-            <span className="text-[9px] font-bold text-muted">CREATOR {node}</span>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Footer */}
-      <div className="pt-4 border-t border-border flex items-center justify-between z-10">
-        <span className="text-xs font-bold text-fg tracking-widest uppercase">{brand}</span>
-        <span className="text-[10px] text-muted font-bold tracking-widest uppercase">Design & Dev Audience</span>
-      </div>
-    </div>
-  );
-}
+const trendingItem = {
+  url: "https://x.com/i/trending/2094634824212631980?s=20",
+  headline: "Monid Hits 4M Transactions and Raises $2.1M Pre-Seed After Bold Team Bet",
+  meta: "15 hours ago · Other · 788 posts",
+  tag: "Trending on X",
+  summary: "Campaign resulted in Monid trending on X timeline with over 788 posts and massive organic reach.",
+};
 
 export default function Work() {
   const prefersReduced = useReducedMotion();
 
-  return (
-    <section id="work" className="bg-bg py-32 md:py-48 border-t border-border">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Section Header */}
-        <motion.div
-          variants={stagger}
-          initial={prefersReduced ? false : "hidden"}
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="mb-20 md:mb-32"
-        >
-          <motion.p
-            variants={fadeUp}
-            className="text-muted text-[10px] font-bold tracking-[0.2em] uppercase mb-5"
-          >
-            Selected Campaigns
-          </motion.p>
-          <motion.h2
-            variants={fadeUp}
-            className="font-black tracking-[-0.03em] leading-[0.9] text-fg"
-            style={{ fontSize: "clamp(2.5rem, 5.5vw, 6rem)" }}
-          >
-            Work that got
-            <br />
-            people talking.
-          </motion.h2>
-        </motion.div>
+  useEffect(() => {
+    const loadTweets = () => {
+      if (typeof window !== "undefined" && (window as any).twttr?.widgets) {
+        (window as any).twttr.widgets.load();
+      }
+    };
 
-        {/* Case Studies List */}
-        <div className="space-y-32 md:space-y-44">
-          {caseStudies.map((project, i) => (
+    loadTweets();
+    const timer = setInterval(loadTweets, 400);
+    const timeout = setTimeout(() => clearInterval(timer), 4000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  return (
+    <section id="work" className="bg-surface/50 py-16 md:py-20 border-t border-border/40">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.45 }}
+          >
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-accent mb-2">
+              Proof of Work
+            </p>
+            <h2
+              className="font-black tracking-[-0.035em] leading-[0.95] text-fg"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Campaigns &amp; Live Reach
+            </h2>
+          </motion.div>
+
+          <motion.p
+            className="text-muted text-xs leading-relaxed max-w-[240px] font-light md:text-right"
+            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            Real paid promos &amp; trending placement on X.
+          </motion.p>
+        </div>
+
+        {/* Minimal 3-card grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-center">
+
+          {/* Tweet Cards - Pure Tweet Embed only */}
+          {promoTweets.map((tweet, i) => (
             <motion.div
-              key={project.id}
-              initial={prefersReduced ? false : { opacity: 0, y: 48 }}
+              key={tweet.id}
+              className="w-full flex justify-center items-center min-h-[300px]"
+              initial={prefersReduced ? false : { opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.75, ease: [0.25, 0.1, 0.25, 1] }}
-              className={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center group`}
+              transition={{ duration: 0.45, delay: i * 0.08 }}
             >
-              {/* Text Side */}
-              <div
-                className={`lg:col-span-6 space-y-8 ${
-                  i % 2 === 1 ? "lg:order-2" : "lg:order-1"
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-xs font-black tracking-widest text-fg border border-fg px-2.5 py-1 rounded">
-                    {project.id}
-                  </span>
-                  <span className="text-xs font-bold text-muted tracking-widest uppercase">
-                    {project.type}
-                  </span>
-                </div>
-
-                <h3
-                  className="font-black tracking-[-0.02em] text-fg group-hover:text-fg/80 transition-colors"
-                  style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
+              <div className="w-full flex justify-center">
+                <blockquote
+                  className="twitter-tweet"
+                  data-theme="light"
+                  data-dnt="true"
+                  data-align="center"
+                  data-conversation="none"
                 >
-                  {project.brand}
-                </h3>
-
-                <p className="text-muted text-base md:text-lg font-light leading-relaxed max-w-xl">
-                  {project.story}
-                </p>
-
-                {/* Results Metrics */}
-                <div className="grid grid-cols-3 gap-6 pt-4 border-t border-border">
-                  {project.results.map((res) => (
-                    <div key={res.label}>
-                      <p className="font-black text-xl md:text-2xl text-fg tracking-tight">
-                        {res.value}
-                      </p>
-                      <p className="text-muted text-[10px] font-semibold tracking-wider uppercase mt-1">
-                        {res.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* View Campaign CTA */}
-                <div className="pt-2">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-fg group-hover:text-accent transition-colors duration-300"
-                  >
-                    View campaign breakdown
-                    <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Visual Side */}
-              <div
-                className={`lg:col-span-6 h-[340px] md:h-[420px] ${
-                  i % 2 === 1 ? "lg:order-1" : "lg:order-2"
-                }`}
-              >
-                <CaseStudyVisual brand={project.brand} index={i} />
+                  <a href={tweet.url}>View post by @{tweet.handle} on X</a>
+                </blockquote>
               </div>
             </motion.div>
           ))}
+
+          {/* Trending Card - Kept as requested */}
+          <motion.a
+            href={trendingItem.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-white rounded-xl border border-fg/[0.07] p-4 flex flex-col justify-between hover:border-accent/30 transition-all duration-250 shadow-sm hover:shadow-md text-left self-stretch min-h-[300px]"
+            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+          >
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <span className="text-[10px] font-semibold tracking-wider uppercase text-fg/70 bg-fg/5 px-2.5 py-1 rounded-full border border-fg/10">
+                  {trendingItem.tag}
+                </span>
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent group-hover:underline">
+                  View news on X <ArrowUpRight size={12} />
+                </span>
+              </div>
+
+              {/* Minimal Trending News Box */}
+              <div className="bg-fg text-white rounded-lg p-3.5 mb-3 border border-fg/10 group-hover:border-accent/40 transition-colors">
+                <p className="text-[10px] text-white/50 font-medium mb-1.5">
+                  {trendingItem.meta}
+                </p>
+                <h3 className="text-xs font-semibold text-white leading-snug tracking-tight">
+                  {trendingItem.headline}
+                </h3>
+              </div>
+
+              <p className="text-fg/80 text-xs font-light leading-relaxed">
+                {trendingItem.summary}
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-fg/[0.05] flex items-center justify-between text-[11px] text-muted">
+              <span>Trending topic on X</span>
+              <span className="text-accent font-medium">788+ posts</span>
+            </div>
+          </motion.a>
+
         </div>
       </div>
+
+      <Script
+        src="https://platform.twitter.com/widgets.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          if (typeof window !== "undefined" && (window as any).twttr?.widgets) {
+            (window as any).twttr.widgets.load();
+          }
+        }}
+      />
     </section>
   );
 }

@@ -3,56 +3,32 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { stats } from "@/lib/data";
 import AnimatedCounter from "./AnimatedCounter";
-import { fadeUp, stagger } from "@/lib/motion";
 
 export default function Stats() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="stats" className="bg-surface py-32 md:py-48 border-t border-b border-border">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Section Header */}
-        <motion.div
-          variants={stagger}
-          initial={prefersReduced ? false : "hidden"}
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="mb-20 md:mb-32"
-        >
-          <motion.p
-            variants={fadeUp}
-            className="text-muted text-[10px] font-bold tracking-[0.2em] uppercase mb-5"
-          >
-            Track Record
-          </motion.p>
-          <motion.h2
-            variants={fadeUp}
-            className="font-black tracking-[-0.03em] leading-[0.9] text-fg"
-            style={{ fontSize: "clamp(2.5rem, 5.5vw, 6rem)" }}
-          >
-            Attention, by
-            <br />
-            the numbers.
-          </motion.h2>
-        </motion.div>
-
-        {/* Stats Grid - Oversized Typography without Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 items-start">
+    <section id="stats" className="bg-white border-y border-fg/[0.06] py-10">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        <div className="grid grid-cols-3 divide-x divide-fg/[0.06]">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={prefersReduced ? false : { opacity: 0, y: 36 }}
+              className="flex flex-col items-center text-center px-4 py-4"
+              initial={prefersReduced ? false : { opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-              className="space-y-4 border-l-2 border-fg/10 pl-6 md:pl-8"
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.45, delay: i * 0.08 }}
             >
-              <div className="text-fg leading-none font-black" style={{ fontSize: "clamp(3.5rem, 7vw, 6.5rem)" }}>
+              <span
+                className="font-black tracking-[-0.04em] leading-none text-fg mb-1.5"
+                style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}
+              >
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-              </div>
-              <p className="text-muted font-bold text-xs md:text-sm tracking-widest uppercase">
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.14em] text-muted font-semibold">
                 {stat.label}
-              </p>
+              </span>
             </motion.div>
           ))}
         </div>

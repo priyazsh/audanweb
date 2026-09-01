@@ -1,126 +1,95 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import HeroVisual from "./HeroVisual";
-import { fadeUp, stagger } from "@/lib/motion";
+import { ArrowRight } from "lucide-react";
+import { useModal } from "@/lib/useModal";
 
 export default function Hero() {
   const prefersReduced = useReducedMotion();
+  const { open } = useModal();
 
   return (
-    <section className="relative min-h-screen flex items-center pt-[60px] overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-start justify-center pt-20 pb-10 overflow-hidden bg-white">
       {/* Subtle dot grid */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(circle, #C8C4BC 1px, transparent 1px)`,
-          backgroundSize: "48px 48px",
-          opacity: 0.35,
+          backgroundImage: `radial-gradient(circle, rgba(26,97,254,0.10) 1px, transparent 1px)`,
+          backgroundSize: "36px 36px",
         }}
       />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none" />
 
-      {/* Gradient fade at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg to-transparent pointer-events-none" />
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full">
+        {/* Badge */}
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="mb-8"
+        >
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.15em] uppercase text-accent border border-accent/20 bg-accent/5 rounded-full px-3.5 py-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent pulse-dot flex-shrink-0" />
+            Now taking campaigns
+          </span>
+        </motion.div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 w-full py-24 lg:py-0">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 xl:gap-20 items-center min-h-[calc(100vh-60px)]">
-          {/* Left: text content */}
-          <motion.div
-            variants={stagger}
-            initial={prefersReduced ? false : "hidden"}
-            animate="visible"
-            className="max-w-2xl"
+        {/* Headline + right column */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-16">
+          <motion.h1
+            initial={prefersReduced ? false : { opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="font-black tracking-[-0.04em] leading-[0.88] text-fg"
+            style={{ fontSize: "clamp(3.2rem, 8vw, 8rem)" }}
           >
-            {/* Label badge */}
-            <motion.div variants={fadeUp} className="mb-8">
-              <span className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.18em] uppercase text-muted border border-border rounded-full px-3.5 py-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
-                Internet-Native Growth Studio
-              </span>
-            </motion.div>
+            Make every
+            <br />
+            <span className="text-accent">dollar</span>
+            <br />
+            count.
+          </motion.h1>
 
-            {/* Headline */}
-            <motion.h1
-              variants={fadeUp}
-              className="font-black tracking-[-0.035em] leading-[0.9] text-fg mb-8"
-              style={{ fontSize: "clamp(3.2rem, 7.5vw, 7.5rem)" }}
-            >
-              Make every
-              <br />
-              marketing
-              <br />
-              <em className="not-italic text-accent">dollar count.</em>
-            </motion.h1>
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            className="lg:max-w-[280px] flex flex-col gap-6 lg:pb-2"
+          >
+            <p className="text-muted text-sm leading-relaxed">
+              Get your product in front of people who actually care. Authentic
+              creator promotions, zero noise. Made for internet products.
+            </p>
 
-            {/* Subtext */}
-            <motion.p
-              variants={fadeUp}
-              className="text-muted font-light leading-relaxed mb-12 max-w-lg"
-              style={{ fontSize: "clamp(1rem, 1.5vw, 1.2rem)" }}
-            >
-              Get your product in front of people who actually care about it.
-              Authentic promotion, meaningful attention, and distribution that
-              doesn&apos;t feel like noise.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              variants={fadeUp}
-              className="flex flex-wrap items-center gap-4"
-            >
-              <a
-                href="mailto:hello@audanweb.xyz"
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={open}
                 id="hero-cta-primary"
-                className="group inline-flex items-center gap-2.5 bg-fg text-bg text-sm font-bold rounded-full px-7 py-4 hover:bg-accent hover:text-fg transition-all duration-300"
+                className="group inline-flex items-center gap-2 bg-accent text-white text-sm font-bold rounded-full px-6 py-3 hover:bg-fg transition-colors duration-200 shadow-lg shadow-accent/20"
               >
                 Start a campaign
-                <ArrowRight
-                  size={15}
-                  className="group-hover:translate-x-0.5 transition-transform duration-200"
-                />
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+              </button>
+              <a href="#work" id="hero-cta-secondary" className="text-muted hover:text-fg text-sm transition-colors duration-200">
+                See work ↓
               </a>
-              <a
-                href="#work"
-                id="hero-cta-secondary"
-                className="inline-flex items-center gap-2 text-muted hover:text-fg text-sm font-medium transition-colors duration-200"
-              >
-                See our work
-                <ChevronDown size={15} />
-              </a>
-            </motion.div>
-          </motion.div>
+            </div>
 
-          {/* Right: hero visual */}
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-            className="hidden lg:flex items-center justify-center"
-          >
-            <HeroVisual />
+            <p className="text-[10px] text-muted/50 uppercase tracking-widest font-medium">
+              700K+ impressions delivered
+            </p>
           </motion.div>
         </div>
-      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-1.5"
-      >
+        {/* Divider */}
         <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="text-muted"
-        >
-          <ChevronDown size={16} />
-        </motion.div>
-        <span className="text-muted text-[9px] font-semibold tracking-[0.2em] uppercase">
-          Scroll
-        </span>
-      </motion.div>
+          initial={prefersReduced ? false : { opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.7, delay: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{ transformOrigin: "left" }}
+          className="mt-16 border-t border-fg/8"
+        />
+      </div>
     </section>
   );
 }

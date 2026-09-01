@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://audanweb.xyz"),
-  title: "AudanWeb — Make Every Marketing Dollar Count",
+  title: "AudanWeb: Make Every Marketing Dollar Count",
   description:
     "AudanWeb helps internet products, SaaS companies, startups, and developers get meaningful attention through authentic promotions, creator collaborations, and internet-native distribution.",
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   manifest: "/favicon/site.webmanifest",
   openGraph: {
-    title: "AudanWeb — Make Every Marketing Dollar Count",
+    title: "AudanWeb: Make Every Marketing Dollar Count",
     description:
       "Authentic promotion, meaningful attention, and distribution that doesn't feel like noise.",
     type: "website",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AudanWeb — Make Every Marketing Dollar Count",
+    title: "AudanWeb: Make Every Marketing Dollar Count",
     images: ["/audanweb.jpeg"],
   },
 };
@@ -52,12 +52,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-bg text-fg overflow-x-hidden">
+      <body className="bg-white text-fg overflow-x-hidden font-sans">
         {children}
       </body>
-      <GoogleAnalytics gaId="G-PES6F9MLJS" />
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

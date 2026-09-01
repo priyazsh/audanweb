@@ -120,7 +120,7 @@ export default function HeroVisual() {
               cx={pt.cx}
               cy={pt.cy}
               r="3"
-              fill="#C3FF00"
+              fill="#1A61FE"
               animate={{ opacity: [0.3, 1, 0.3], r: [2, 4, 2] }}
               transition={{
                 duration: 2.2,
