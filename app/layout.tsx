@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Figtree } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import DarkVeil from "@/components/DarkVeil";
 import "./globals.css";
 
-const inter = Inter({
+const figtree = Figtree({
+  variable: "--font-body",
   subsets: ["latin"],
-  variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -55,8 +55,13 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="bg-white text-fg overflow-x-hidden font-sans">
+    <html lang="en">
+      <body
+        className={`${figtree.variable} antialiased bg-white text-ink selection:bg-brand selection:text-white relative min-h-screen overflow-x-hidden`}
+      >
+        <div className="fixed inset-0 pointer-events-none -z-10">
+          <DarkVeil hueShift={0} speed={0.5} />
+        </div>
         {children}
       </body>
       {gaId && <GoogleAnalytics gaId={gaId} />}

@@ -1,94 +1,133 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
 import { useModal } from "@/lib/useModal";
 
 export default function Hero() {
-  const prefersReduced = useReducedMotion();
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const subheadlineRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
   const { open } = useModal();
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.fromTo(
+        badgeRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 }
+      )
+        .fromTo(
+          headlineRef.current,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          "-=0.3"
+        )
+        .fromTo(
+          subheadlineRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "-=0.4"
+        )
+        .fromTo(
+          ctaRef.current,
+          { opacity: 0, y: 20, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+          "-=0.3"
+        );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex flex-col items-start justify-center pt-20 pb-10 overflow-hidden bg-white">
-      {/* Subtle dot grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle, rgba(26,97,254,0.10) 1px, transparent 1px)`,
-          backgroundSize: "36px 36px",
-        }}
-      />
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-
-      <div className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full">
-        {/* Badge */}
-        <motion.div
-          initial={prefersReduced ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-8"
-        >
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-[0.15em] uppercase text-accent border border-accent/20 bg-accent/5 rounded-full px-3.5 py-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent pulse-dot flex-shrink-0" />
-            Now taking campaigns
-          </span>
-        </motion.div>
-
-        {/* Headline + right column */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-16">
-          <motion.h1
-            initial={prefersReduced ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="font-black tracking-[-0.04em] leading-[0.88] text-fg"
-            style={{ fontSize: "clamp(3.2rem, 8vw, 8rem)" }}
-          >
-            Make every
-            <br />
-            <span className="text-accent">dollar</span>
-            <br />
-            count.
-          </motion.h1>
-
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="lg:max-w-[280px] flex flex-col gap-6 lg:pb-2"
-          >
-            <p className="text-muted text-sm leading-relaxed">
-              Get your product in front of people who actually care. Authentic
-              creator promotions, zero noise. Made for internet products.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={open}
-                id="hero-cta-primary"
-                className="group inline-flex items-center gap-2 bg-accent text-white text-sm font-bold rounded-full px-6 py-3 hover:bg-fg transition-colors duration-200 shadow-lg shadow-accent/20"
-              >
-                Start a campaign
-                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
-              </button>
-              <a href="#work" id="hero-cta-secondary" className="text-muted hover:text-fg text-sm transition-colors duration-200">
-                See work ↓
-              </a>
-            </div>
-
-            <p className="text-[10px] text-muted/50 uppercase tracking-widest font-medium">
-              700K+ impressions delivered
-            </p>
-          </motion.div>
+    <section className="pt-40 md:pt-48 px-4 md:px-6 max-w-[1440px] mx-auto overflow-hidden">
+      <div className="text-center max-w-5xl mx-auto mb-20 md:mb-32">
+        <div ref={badgeRef} className="inline-flex items-center justify-center mb-10">
+          <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white shadow-md border border-gray-100 hover:shadow-lg transition-all cursor-default">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-ink">
+              Now taking campaigns
+            </span>
+          </div>
         </div>
 
-        {/* Divider */}
-        <motion.div
-          initial={prefersReduced ? false : { opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.7, delay: 0.65, ease: [0.25, 0.1, 0.25, 1] }}
-          style={{ transformOrigin: "left" }}
-          className="mt-16 border-t border-fg/8"
-        />
+        <h1 ref={headlineRef} className="hero-framer-text mb-8 max-w-4xl mx-auto">
+          Make every dollar count.
+        </h1>
+
+        <p
+          ref={subheadlineRef}
+          className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10 font-normal"
+        >
+          Get your product in front of people who actually care. Authentic
+          creator promotions, zero noise. Made for internet products.
+        </p>
+
+        <div ref={ctaRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+          <button
+            onClick={open}
+            id="hero-cta-primary"
+            className="bg-brand text-white px-8 py-4 rounded-full text-base hover:bg-brand-dark transition-all shadow-xl shadow-gray-200/50 min-w-[200px] inline-block text-center"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1.05,
+                y: -4,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1,
+                y: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+            onMouseDown={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 0.98,
+                duration: 0.1,
+              });
+            }}
+            onMouseUp={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1.05,
+                duration: 0.1,
+              });
+            }}
+          >
+            Start a campaign
+          </button>
+          <a
+            href="#work"
+            id="hero-cta-secondary"
+            className="text-gray-600 font-medium hover:text-ink transition-colors"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                x: 5,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                x: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+          >
+            See work
+          </a>
+        </div>
       </div>
     </section>
   );

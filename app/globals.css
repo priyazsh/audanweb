@@ -1,58 +1,273 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
-
-  --color-bg: #FFFFFF;
-  --color-fg: #0B132B;
-  --color-dark: #070D1E;
-  --color-muted: #64748B;
-  --color-subtle: #F0F4FF;
-  --color-border: rgba(11,19,43,0.08);
-  --color-accent: #1A61FE;
-  --color-surface: #F8FAFF;
-  --color-white: #FFFFFF;
+  --color-brand: #1a61fe;
+  --color-brand-dark: #1248d6;
+  --color-ink: #1e3a8a;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-* {
+body {
+  font-family: var(--font-body), "Figtree", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
 }
 
-::selection {
-  background-color: #1A61FE;
-  color: #FFFFFF;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-heading {
+  font-family: var(--font-body), "Figtree", sans-serif;
 }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #fff; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #1A61FE; }
+/* Hide Scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-/* Marquee */
+/* Hide scrollbar in marquee containers */
+.marquee-container,
+.marquee-container * {
+  overflow: hidden !important;
+}
+.marquee-container *::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Ensure ChatButton is positioned on the right */
+#chat-button {
+  right: 1.5rem !important;
+  left: auto !important;
+  position: fixed !important;
+}
+
+/* Subtle grid pattern for backgrounds */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(
+      to right,
+      rgba(26, 97, 254, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(26, 97, 254, 0.05) 1px, transparent 1px);
+}
+
+/* Marquee Animation */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 22s linear infinite;
-}
-.marquee-track:hover {
-  animation-play-state: paused;
+.animate-marquee {
+  animation: marquee 30s linear infinite;
 }
 
-/* Glowing accent dot */
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(26,97,254,0.5); }
-  50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(26,97,254,0); }
+/* Framer Hero Text Style */
+.hero-framer-text {
+  font-family: var(--font-body), "Figtree", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 120%;
+  color: #1e3a8a;
+  text-align: center;
 }
-.pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+
+/* Responsive sizing to match design intent while being mobile friendly */
+.hero-framer-text {
+  font-size: 3rem; /* ~48px mobile */
+}
+
+@media (min-width: 768px) {
+  .hero-framer-text {
+    font-size: 64px; /* Desktop target size */
+  }
+}
+
+/* Animated blob background */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Framer Button Styles */
+button {
+  font-family: var(--font-body), "Figtree", sans-serif;
+  font-weight: 500 !important;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+  line-height: 1em;
+  text-align: start;
+  text-decoration: none;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Liquid glass effect for brand buttons */
+button[class*="bg-brand"] {
+  background: linear-gradient(
+    135deg,
+    rgba(18, 55, 200, 0.96) 0%,
+    rgba(26, 97, 254, 0.98) 100%
+  ) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(26, 97, 254, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 0 1px rgba(11, 27, 74, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button[class*="bg-brand"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+button[class*="bg-brand"]:hover::before {
+  left: 100%;
+}
+
+button[class*="bg-brand"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 48, 180, 0.98) 0%,
+    rgba(18, 72, 214, 1) 100%
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 40px rgba(26, 97, 254, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(11, 27, 74, 0.25);
+  transform: translateY(-1px);
+}
+
+button[class*="bg-brand"]:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(26, 97, 254, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Button-like anchor tags */
+a.rounded-full[class*="bg-"],
+a.rounded-full[class*="px-"] {
+  font-family: var(--font-body), "Figtree", sans-serif;
+  font-weight: 500 !important;
+  letter-spacing: -0.03em;
+  line-height: 1em;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Liquid glass effect for brand anchor buttons */
+a[class*="bg-brand"] {
+  background: linear-gradient(
+    135deg,
+    rgba(18, 55, 200, 0.96) 0%,
+    rgba(26, 97, 254, 0.98) 100%
+  ) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(26, 97, 254, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 0 1px rgba(11, 27, 74, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a[class*="bg-brand"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+a[class*="bg-brand"]:hover::before {
+  left: 100%;
+}
+
+a[class*="bg-brand"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 48, 180, 0.98) 0%,
+    rgba(18, 72, 214, 1) 100%
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 40px rgba(26, 97, 254, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(11, 27, 74, 0.25);
+  transform: translateY(-1px);
+}
+
+button strong,
+button b,
+button[class*="font-bold"] {
+  font-weight: 700 !important;
+}
+
+/* Override font-semibold and font-medium on buttons to use 500 weight */
+button[class*="font-semibold"],
+button[class*="font-medium"] {
+  font-weight: 500 !important;
+}
+
+/* Dark Veil Canvas Styles - Light Gray on White */
+.darkveil-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  mix-blend-mode: multiply;
+  opacity: 0.8;
 }

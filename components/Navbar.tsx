@@ -1,58 +1,93 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
 import { useModal } from "@/lib/useModal";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   const { open } = useModal();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        navRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+      );
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-sm border-b border-fg/[0.06] py-3"
-          : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 select-none group">
-          <div className={`w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 transition-shadow duration-300 ${scrolled ? "shadow-sm" : ""}`}>
+    <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <nav
+        ref={navRef}
+        className="pointer-events-auto flex items-center justify-between gap-8 p-2 pl-2 bg-white/90 backdrop-blur-xl border border-gray-100/50 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-gray-50 min-w-[320px] md:min-w-[400px] max-w-2xl w-full mx-auto"
+      >
+        <a href="/" className="flex items-center gap-3 pl-2">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-white border border-gray-100 rounded-xl flex items-center justify-center shadow-sm overflow-hidden">
             <Image
               src="/favicon/apple-touch-icon.png"
               alt="AudanWeb"
-              width={32}
-              height={32}
+              width={40}
+              height={40}
               className="object-cover w-full h-full"
             />
           </div>
-          <span className="font-black text-[15px] tracking-tight text-fg select-none">
-            AudanWeb<span className="text-accent">.</span>
+          <span className="font-heading font-semibold text-ink text-sm md:text-base tracking-tight">
+            AudanWeb
           </span>
-        </Link>
+        </a>
 
-        <button
-          onClick={open}
-          id="nav-cta-btn"
-          className="group inline-flex items-center gap-2 bg-fg text-white text-[13px] font-semibold rounded-full px-5 py-2.5 hover:bg-accent transition-colors duration-250 shadow-sm"
-        >
-          Start a campaign
-          <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-        </button>
-      </div>
-    </motion.header>
+        <div className="flex items-center gap-6 pr-2">
+          <a
+            href="#work"
+            className="text-sm font-medium text-gray-600 hover:text-ink transition-colors hidden sm:block"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                y: -2,
+                duration: 0.2,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                y: 0,
+                duration: 0.2,
+                ease: "power2.out",
+              });
+            }}
+          >
+            Work
+          </a>
+          <button
+            onClick={open}
+            id="nav-cta-btn"
+            className="bg-brand text-white px-5 py-2.5 rounded-full text-sm hover:bg-brand-dark transition-all shadow-lg shadow-brand/10"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1.05,
+                y: -2,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                scale: 1,
+                y: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+          >
+            Start a campaign
+          </button>
+        </div>
+      </nav>
+    </div>
   );
 }

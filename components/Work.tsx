@@ -2,25 +2,26 @@
 
 import { useEffect } from "react";
 import Script from "next/script";
-import { motion, useReducedMotion } from "framer-motion";
+import gsap from "gsap";
 import { ArrowUpRight } from "lucide-react";
 import { promoTweets } from "@/lib/data";
 
 const trendingItem = {
   url: "https://x.com/i/trending/2094634824212631980?s=20",
-  headline: "Monid Hits 4M Transactions and Raises $2.1M Pre-Seed After Bold Team Bet",
+  headline:
+    "Monid Hits 4M Transactions and Raises $2.1M Pre-Seed After Bold Team Bet",
   meta: "15 hours ago · Other · 788 posts",
   tag: "Trending on X",
-  summary: "Campaign resulted in Monid trending on X timeline with over 788 posts and massive organic reach.",
+  summary:
+    "Campaign resulted in Monid trending on X timeline with over 788 posts and massive organic reach.",
 };
 
 export default function Work() {
-  const prefersReduced = useReducedMotion();
-
   useEffect(() => {
     const loadTweets = () => {
-      if (typeof window !== "undefined" && (window as any).twttr?.widgets) {
-        (window as any).twttr.widgets.load();
+      const twttr = (window as Window & { twttr?: { widgets: { load: () => void } } }).twttr;
+      if (twttr?.widgets) {
+        twttr.widgets.load();
       }
     };
 
@@ -35,52 +36,55 @@ export default function Work() {
   }, []);
 
   return (
-    <section id="work" className="bg-surface/50 py-16 md:py-20 border-t border-border/40">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-          <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.45 }}
-          >
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-accent mb-2">
-              Proof of Work
-            </p>
-            <h2
-              className="font-black tracking-[-0.035em] leading-[0.95] text-fg"
-              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
-            >
-              Campaigns &amp; Live Reach
-            </h2>
-          </motion.div>
-
-          <motion.p
-            className="text-muted text-xs leading-relaxed max-w-[240px] font-light md:text-right"
-            initial={prefersReduced ? false : { opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
-            Real paid promos &amp; trending placement on X.
-          </motion.p>
+    <section id="work" className="py-24 md:py-32 bg-gray-50/50 border-y border-gray-200 scroll-mt-32">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-6">
+        <div className="text-center mb-16 md:mb-24">
+          <div className="inline-block bg-white border border-gray-200 rounded-full px-4 py-1.5 mb-6 shadow-sm">
+            <span className="text-sm font-semibold text-ink">Our Work</span>
+          </div>
+          <h2 className="hero-framer-text max-w-3xl mx-auto mb-6">
+            Campaigns & Live Reach
+          </h2>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+            Real paid promos and trending placement on X.
+          </p>
         </div>
 
-        {/* Minimal 3-card grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-center">
-
-          {/* Tweet Cards - Pure Tweet Embed only */}
-          {promoTweets.map((tweet, i) => (
-            <motion.div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          {promoTweets.map((tweet) => (
+            <div
               key={tweet.id}
-              className="w-full flex justify-center items-center min-h-[300px]"
-              initial={prefersReduced ? false : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.45, delay: i * 0.08 }}
+              className="bg-white rounded-[2.5rem] p-4 md:p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col"
+              onMouseEnter={(e) => {
+                gsap.to(e.currentTarget, {
+                  y: -8,
+                  duration: 0.3,
+                  ease: "power2.out",
+                });
+              }}
+              onMouseLeave={(e) => {
+                gsap.to(e.currentTarget, {
+                  y: 0,
+                  duration: 0.3,
+                  ease: "power2.out",
+                });
+              }}
             >
-              <div className="w-full flex justify-center">
+              <div className="flex items-center justify-between gap-2 mb-4 px-2">
+                <span className="text-xs font-medium text-gray-600 bg-gray-50 border border-gray-100 rounded-lg px-2.5 py-1">
+                  {tweet.type}
+                </span>
+                <a
+                  href={tweet.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-ink"
+                >
+                  Live Preview
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+              <div className="w-full flex justify-center min-h-[280px] overflow-hidden rounded-2xl">
                 <blockquote
                   className="twitter-tweet"
                   data-theme="light"
@@ -91,51 +95,59 @@ export default function Work() {
                   <a href={tweet.url}>View post by @{tweet.handle} on X</a>
                 </blockquote>
               </div>
-            </motion.div>
+            </div>
           ))}
 
-          {/* Trending Card - Kept as requested */}
-          <motion.a
+          <a
             href={trendingItem.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white rounded-xl border border-fg/[0.07] p-4 flex flex-col justify-between hover:border-accent/30 transition-all duration-250 shadow-sm hover:shadow-md text-left self-stretch min-h-[300px]"
-            initial={prefersReduced ? false : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.45, delay: 0.2 }}
+            className="group bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col justify-between min-h-[300px]"
+            onMouseEnter={(e) => {
+              gsap.to(e.currentTarget, {
+                y: -8,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
+            onMouseLeave={(e) => {
+              gsap.to(e.currentTarget, {
+                y: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              });
+            }}
           >
             <div>
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="text-[10px] font-semibold tracking-wider uppercase text-fg/70 bg-fg/5 px-2.5 py-1 rounded-full border border-fg/10">
+              <div className="flex items-center justify-between gap-2 mb-6">
+                <span className="text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1">
                   {trendingItem.tag}
                 </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent group-hover:underline">
-                  View news on X <ArrowUpRight size={12} />
+                <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 group-hover:text-ink">
+                  View on X
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </span>
               </div>
 
-              {/* Minimal Trending News Box */}
-              <div className="bg-fg text-white rounded-lg p-3.5 mb-3 border border-fg/10 group-hover:border-accent/40 transition-colors">
-                <p className="text-[10px] text-white/50 font-medium mb-1.5">
+              <div className="bg-[#0F0F11] text-white rounded-2xl p-5 mb-5 border border-gray-800">
+                <p className="text-[10px] text-gray-400 font-medium mb-2 uppercase tracking-wider">
                   {trendingItem.meta}
                 </p>
-                <h3 className="text-xs font-semibold text-white leading-snug tracking-tight">
+                <h3 className="text-sm font-semibold text-white leading-snug tracking-tight">
                   {trendingItem.headline}
                 </h3>
               </div>
 
-              <p className="text-fg/80 text-xs font-light leading-relaxed">
+              <p className="text-sm text-gray-500 leading-relaxed">
                 {trendingItem.summary}
               </p>
             </div>
 
-            <div className="pt-3 border-t border-fg/[0.05] flex items-center justify-between text-[11px] text-muted">
+            <div className="pt-5 mt-5 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
               <span>Trending topic on X</span>
-              <span className="text-accent font-medium">788+ posts</span>
+              <span className="font-semibold text-ink">788+ posts</span>
             </div>
-          </motion.a>
-
+          </a>
         </div>
       </div>
 
@@ -143,8 +155,9 @@ export default function Work() {
         src="https://platform.twitter.com/widgets.js"
         strategy="afterInteractive"
         onLoad={() => {
-          if (typeof window !== "undefined" && (window as any).twttr?.widgets) {
-            (window as any).twttr.widgets.load();
+          const twttr = (window as Window & { twttr?: { widgets: { load: () => void } } }).twttr;
+          if (twttr?.widgets) {
+            twttr.widgets.load();
           }
         }}
       />
